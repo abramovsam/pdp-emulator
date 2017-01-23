@@ -22,14 +22,21 @@ void throw_kb_interrupt(vcpu_t* vcpu, uint8_t data)
 void run_emulator(vcpu_t* vcpu)
 {
 	if (!(vcpu->is_running))
+	{	
 		vcpu->is_running = 1;
-	else
 		vcpu->stop_flag = 0;
+	}
+	else
+	{	
+		vcpu->stop_flag = 0;
+	}
 }
 
 void reset_emulator(vcpu_t* vcpu)
 {
 	CLEAR_RUN_FLAG(vcpu);
+	RESET_STEP_FLAG(vcpu);
+	RESET_STOP_FLAG(vcpu);	
 }
 
 int cpu_emulation(vcpu_t** vcpu, char* path)
@@ -47,34 +54,34 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 		if (emulator_halted)
 			break;
 
-		if ((*vcpu)->is_running)
+		if ((*vcpu)->is_running || (*vcpu)->stop_flag)
 		{
 			emu_stat_t exec_st = EMU_SUCCESS;
 			
 			while (1)
 			{
-				if (!((*vcpu)->is_running))
+				if (!((*vcpu)->is_running) && !(*vcpu)->stop_flag)
+					break; 
+				
+				if (emulator_halted)
 					break; 
 
 				if (is_break(*vcpu, (*vcpu)->regs[PC]))
 					SET_STOP_FLAG((*vcpu));
 
-				if (! (*vcpu)->stop_flag || (*vcpu)->step_flag)
+				if (!(*vcpu)->stop_flag || (*vcpu)->step_flag)
 				{
-//					if ((*vcpu)->stop_flag)			
-//						RESET_STEP_FLAG((*vcpu));	
+					if ((*vcpu)->stop_flag)
+						RESET_STEP_FLAG((*vcpu));
 
-					if ((*vcpu)->stop_flag || !((*vcpu)->is_running))		// TODO: Need to check			
-						RESET_STEP_FLAG((*vcpu));	
+					if (!((*vcpu)->is_running) && !(*vcpu)->stop_flag)
+						break;
 
 					exec_st = cpu_exec((*vcpu));			
 					vcpu_print(*vcpu);
-					
-		//			 sleep(1); // FIXME: Just for debug
 
-					if (is_kb_interrupt_rec(*vcpu))
-						kb_interrupt_handler(*vcpu);
-
+					// sleep(1); // FIXME: Just for debug
+				
 					if (exec_st == EMU_END)
 						break;
 				}
