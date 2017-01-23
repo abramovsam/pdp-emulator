@@ -11,6 +11,8 @@
 #include <unistd.h>
 #include <string.h>
 
+int emulator_initialized;
+int emulator_halted;
 
 void throw_kb_interrupt(vcpu_t* vcpu, uint8_t data)
 {

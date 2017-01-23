@@ -74,9 +74,6 @@ typedef struct vcpu
 
 } vcpu_t;
 
-int emulator_initialized;
-int emulator_halted;
-
 typedef enum emu_stat
 {	
 	EMU_SUCCESS,
