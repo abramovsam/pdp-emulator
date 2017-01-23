@@ -65,9 +65,9 @@ int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
 	KB_INTERRUPT_ON(vcpu);	
 	PS_INIT(vcpu);
 
-	vcpu->stop_flag = 0;
-	vcpu->is_running = 0;
-	vcpu->step_flag = 0;
+	RESET_RUN_FLAG(vcpu);
+	RESET_STOP_FLAG(vcpu);
+	RESET_STEP_FLAG(vcpu);
 
 	load_from_rom(path_to_rom, vcpu->mem_entry);
 
@@ -85,10 +85,10 @@ int vcpu_restore(vcpu_t* vcpu, char* path_to_rom)
 //	vcpu->regs[PC] = 0x200;
 	vcpu->regs[PC] = 0x0;
 
-	vcpu->stop_flag = 0;
-	vcpu->is_running = 0;
-	vcpu->step_flag = 0;
-
+	RESET_RUN_FLAG(vcpu);
+	RESET_STOP_FLAG(vcpu);
+	RESET_STEP_FLAG(vcpu);
+	
 	INIT_OUT_STAT_REG(vcpu);
 	KB_INTERRUPT_ON(vcpu);	
 	PS_INIT(vcpu);

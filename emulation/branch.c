@@ -23,7 +23,6 @@ emu_stat_t br_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode
 	return EMU_SUCCESS;
 }
 
-
 emu_stat_t bne_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;

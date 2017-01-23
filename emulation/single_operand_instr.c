@@ -224,12 +224,10 @@ emu_stat_t ror_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 
 	dst = fetch_op_general(vcpu, dst_disp, dst_mode, mode, &dst_addr);	
 
-	uint16_t low_bit = 0;;
+	uint16_t low_bit = 0;
 
 	low_bit = dst & 0x0001;
-
 	dst = dst >> 1;
-	
 	dst = dst | (GET_C(vcpu) << (15 - (8 * mode)));
 
 	writeback_dst_ops(vcpu, dst, dst_disp, dst_mode, mode, dst_addr);

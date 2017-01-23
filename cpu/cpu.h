@@ -225,27 +225,6 @@ typedef enum emu_stat
 	do {	\
 		(*(vcpu->psw)).reg_val = (value);	\
 	} while (0)
-/*
-#define GET_C(vcpu, bit_c)	\
-	do {	\
-		bit_c = (*(vcpu->psw)).c;	\
-	} while (0)
-
-#define GET_Z(vcpu, bit_z)	\
-	do {	\
-		bit_z = (*(vcpu->psw)).z;	\
-	} while (0)
-
-#define GET_N(vcpu, bit_n)	\
-	do {	\
-		bit_n = (*(vcpu->psw)).n;	\
-	} while (0)
-
-#define GET_V(vcpu, bit_v)	\
-	do {	\
-		bit_v = (*(vcpu->psw)).v;	\
-	} while (0)
-*/
 
 #define GET_C(vcpu)	(*(vcpu->psw)).c	
 
@@ -300,7 +279,7 @@ typedef enum emu_stat
 		vcpu->step_flag = 0;	\
 	} while (0)
 
-#define CLEAR_RUN_FLAG(vcpu)	\
+#define RESET_RUN_FLAG(vcpu)	\
 	do {	\
 		vcpu->is_running = 0;	\
 	} while(0)

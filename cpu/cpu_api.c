@@ -36,7 +36,7 @@ void run_emulator(vcpu_t* vcpu)
 
 void reset_emulator(vcpu_t* vcpu)
 {
-	CLEAR_RUN_FLAG(vcpu);
+	RESET_RUN_FLAG(vcpu);
 	RESET_STEP_FLAG(vcpu);
 	RESET_STOP_FLAG(vcpu);	
 }
@@ -82,8 +82,6 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 					exec_st = cpu_exec((*vcpu));			
 					vcpu_print(*vcpu);
 
-					// sleep(1); // FIXME: Just for debug
-				
 					if (exec_st == EMU_END)
 						break;
 				}
@@ -139,9 +137,6 @@ uint16_t get_register(vcpu_t* vcpu, uint8_t num)
 {
 	return GET_CPU_REG(vcpu, num);
 }
-
-/* FIXME: Need to rewrite get flag functions  
-	in smarter style */
 
 uint8_t get_nflag(vcpu_t* vcpu)
 {
