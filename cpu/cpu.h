@@ -7,7 +7,8 @@
 #define ADDR_SPACE_SIZE		0400000	 // 128K 
 #define MEM_SPACE_SIZE		0200000	 // 64K	
 #define BR_POINT_ADDR		0200020  // 65536 + 16
-#define KB_INTERRUPT_VEC	060	 	 //	48 in dec
+//#define KB_INTERRUPT_VEC	060	 	 //	48 in dec
+#define KB_INTERRUPT_VEC	0x0	 	 //	48 in dec
 #define KB_STAT_REG			0177560
 #define KB_DATA_REG			0177562
 #define OUT_STAT_REG		0177564

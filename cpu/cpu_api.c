@@ -88,9 +88,7 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 				}
 
 				if (is_kb_interrupt_rec(*vcpu))
-				{
 					kb_interrupt_handler(*vcpu);
-				}	
 			}			
 
 			if (emulator_halted)
