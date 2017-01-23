@@ -11,25 +11,14 @@
 emu_stat_t br_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 
 	GET_OFFSET(op, offset);
-
-	printf("vcpu PC previous: %d\n", vcpu->regs[PC]);
-
 	GET_PC(vcpu, pc);
 
 	pc = pc + offset * 2;
 
-	printf("offset: %d\n", offset);
-	printf("new pc: %d\n", pc);
-
-	// writeback
-
-
 	SET_PC(vcpu, pc);
-
-	printf("updated pc : %d\n", vcpu->regs[PC]);
 
 	return EMU_SUCCESS;
 }
@@ -38,7 +27,7 @@ emu_stat_t br_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode
 emu_stat_t bne_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;				
 	uint8_t bit_z = 0;
 
 	GET_OFFSET(op, offset);
@@ -49,9 +38,6 @@ emu_stat_t bne_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (!bit_z)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}
 
@@ -61,7 +47,7 @@ emu_stat_t bne_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t beq_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;			
 	uint8_t bit_z = 0;
 
 	GET_OFFSET(op, offset);
@@ -72,9 +58,6 @@ emu_stat_t beq_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_z)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}
 
@@ -84,7 +67,7 @@ emu_stat_t beq_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bpl_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;		
 	uint8_t bit_n = 0;
 
 	GET_OFFSET(op, offset);
@@ -95,9 +78,6 @@ emu_stat_t bpl_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (!bit_n)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -107,7 +87,7 @@ emu_stat_t bpl_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bmi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;		
 	uint8_t bit_n = 0;
 
 	GET_OFFSET(op, offset);
@@ -118,9 +98,6 @@ emu_stat_t bmi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_n)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -130,7 +107,7 @@ emu_stat_t bmi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bvc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_v = 0;
 
 	GET_OFFSET(op, offset);
@@ -141,9 +118,6 @@ emu_stat_t bvc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (!bit_v)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -153,7 +127,7 @@ emu_stat_t bvc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bvs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_v = 0;
 
 	GET_OFFSET(op, offset);
@@ -164,9 +138,6 @@ emu_stat_t bvs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_v)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -176,7 +147,7 @@ emu_stat_t bvs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bcc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
@@ -187,9 +158,6 @@ emu_stat_t bcc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (!bit_c)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -200,7 +168,7 @@ emu_stat_t bcc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bcs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
@@ -211,9 +179,6 @@ emu_stat_t bcs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_c)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -223,7 +188,7 @@ emu_stat_t bcs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bge_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_n = 0, bit_v = 0;
 
 	GET_OFFSET(op, offset);
@@ -235,9 +200,6 @@ emu_stat_t bge_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (!(bit_n ^ bit_v))
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -247,7 +209,7 @@ emu_stat_t bge_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t blt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_n = 0, bit_v = 0;
 
 	GET_OFFSET(op, offset);
@@ -259,9 +221,6 @@ emu_stat_t blt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_n ^ bit_v)
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -271,7 +230,7 @@ emu_stat_t blt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bgt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_n = 0, bit_v = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
@@ -284,9 +243,6 @@ emu_stat_t bgt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (!(bit_z ^ (bit_n ^ bit_v))) 
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -296,7 +252,7 @@ emu_stat_t bgt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t ble_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_n = 0, bit_v = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
@@ -309,9 +265,6 @@ emu_stat_t ble_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_z ^ (bit_n ^ bit_v)) 
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -321,7 +274,7 @@ emu_stat_t ble_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t bhi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_c = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
@@ -333,9 +286,6 @@ emu_stat_t bhi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_c == 0 && bit_z == 0) 
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -345,7 +295,7 @@ emu_stat_t bhi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 emu_stat_t blos_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_c = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
@@ -357,9 +307,6 @@ emu_stat_t blos_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mo
 	if (bit_c ^ bit_z) 
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -370,7 +317,7 @@ emu_stat_t blos_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mo
 emu_stat_t bhis_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
@@ -381,9 +328,6 @@ emu_stat_t bhis_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mo
 	if (!bit_c) 
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 
@@ -393,7 +337,7 @@ emu_stat_t bhis_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mo
 emu_stat_t blo_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mode_t mode)
 {
 	uint16_t pc = 0;
-	int8_t offset = 0;			// NOTE: Here we use signed value due to man	
+	int8_t offset = 0;	
 	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
@@ -404,9 +348,6 @@ emu_stat_t blo_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	if (bit_c) 
 	{
 		pc = pc + offset * 2;
-	
-		// writeback
-
 		SET_PC(vcpu, pc);
 	}	
 

@@ -55,7 +55,6 @@ emu_stat_t add_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	dst = fetch_op_general(vcpu, dst_disp, dst_mode, mode, &dst_addr);		
 
 	src_dst = dst;
-
 	dst = dst + src;
 	
 	writeback_dst_ops(vcpu, dst, dst_disp, dst_mode, mode, dst_addr);	
@@ -87,7 +86,6 @@ emu_stat_t sub_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	dst = fetch_op_general(vcpu, dst_disp, dst_mode, mode, &dst_addr);	
 
 	src_dst = dst;
-
 	dst = dst + (~(src)) + 1;
 
 	writeback_dst_ops(vcpu, dst, dst_disp, dst_mode, mode, dst_addr);
