@@ -18,6 +18,7 @@ void throw_kb_interrupt(vcpu_t* vcpu, uint8_t data)
 {
 	SET_KB_DATA_REG(vcpu, data);	
 	printf("Keyboard interrupt was received\n");	
+	printf("Data: %o\n", data);
 	SET_KB_STAT_REG(vcpu);
 }
 
@@ -85,6 +86,11 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 					if (exec_st == EMU_END)
 						break;
 				}
+
+				if (is_kb_interrupt_rec(*vcpu))
+				{
+					kb_interrupt_handler(*vcpu);
+				}	
 			}			
 
 			if (emulator_halted)

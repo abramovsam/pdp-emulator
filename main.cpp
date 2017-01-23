@@ -8,7 +8,7 @@
 
 void *cpu(void *p){
     Arg *arg = (Arg *)p;
-    char *path_to_file = "/home/parallels/Documents/parallels/computer_architecture/pdp11/fill_pic.txt";
+    char *path_to_file = "/home/sabramov/test_pdp/key.txt";
 
     vcpu_t* vcpu = (vcpu_t*)arg->vcpu;
     if (arg->argc == 1)
