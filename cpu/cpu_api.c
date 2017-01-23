@@ -88,8 +88,6 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 
 			if (exec_st == EMU_END || exec_st == EMU_UNDEFINED)
 				vcpu_restore(*vcpu, path); 
-
-
 		}	
 	}
 
