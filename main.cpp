@@ -10,7 +10,7 @@ void *cpu(void *p){
     Arg *arg = (Arg *)p;
 
     vcpu_t* vcpu = (vcpu_t*)arg->vcpu;
-    cpu_emulation(&vcpu, "/home/parallels/Documents/parallels/computer_architecture/pdp11/fill_pic.txt");
+    cpu_emulation(&vcpu, "/home/sabramov/test_pdp/fill_pic.txt");
 
     return NULL;
 }

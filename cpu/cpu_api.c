@@ -145,30 +145,22 @@ uint16_t get_register(vcpu_t* vcpu, uint8_t num)
 
 uint8_t get_nflag(vcpu_t* vcpu)
 {
-	uint8_t bit_n;
-	GET_N(vcpu, bit_n);
-	return bit_n;
+	return GET_N(vcpu);
 }
 
 uint8_t get_cflag(vcpu_t* vcpu)
 {
-	uint8_t bit_c;
-	GET_C(vcpu, bit_c);
-	return bit_c;
+	return GET_C(vcpu);
 }
 
 uint8_t get_vflag(vcpu_t* vcpu)
 {
-	uint8_t bit_v;
-	GET_V(vcpu, bit_v);
-	return bit_v;
+	return GET_V(vcpu);
 }
 
 uint8_t get_zflag(vcpu_t* vcpu)
 {
-	uint8_t bit_z;
-	GET_Z(vcpu, bit_z);
-	return bit_z;
+	return GET_Z(vcpu);
 }
 
 int is_emu_halt()

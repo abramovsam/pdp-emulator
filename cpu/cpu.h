@@ -190,18 +190,6 @@ typedef enum emu_stat
 		*(vcpu->kb_stat_reg) = 0200;	\
  	} while (0)
 
-/*
-#define SET_OUT_STAT_REG(vcpu)	\
-	do {	\
-		*(vcpu->out_stat_reg) = 0200;	\
- 	} while (0)
-
-#define RESET_OUT_STAT_REG(vcpu)	\
-	do {	\
-		*(vcpu->out_stat_reg) &= 0x0000;	\
-	} while (0)
-*/
-
 #define KB_INTERRUPT_ON(vcpu)	\
  	do {	\
  		*(vcpu->kb_stat_reg) |= 0x40;	\
@@ -237,7 +225,7 @@ typedef enum emu_stat
 	do {	\
 		(*(vcpu->psw)).reg_val = (value);	\
 	} while (0)
-
+/*
 #define GET_C(vcpu, bit_c)	\
 	do {	\
 		bit_c = (*(vcpu->psw)).c;	\
@@ -257,6 +245,15 @@ typedef enum emu_stat
 	do {	\
 		bit_v = (*(vcpu->psw)).v;	\
 	} while (0)
+*/
+
+#define GET_C(vcpu)	(*(vcpu->psw)).c	
+
+#define GET_Z(vcpu)	(*(vcpu->psw)).z
+
+#define GET_N(vcpu)	(*(vcpu->psw)).n
+
+#define GET_V(vcpu)	(*(vcpu->psw)).v
 
 #define SET_T(vcpu)	\
 	do {	\

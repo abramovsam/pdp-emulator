@@ -140,14 +140,7 @@ void vcpu_print(vcpu_t* vcpu)
 		vcpu->regs[REG0], vcpu->regs[REG1], vcpu->regs[REG2], vcpu->regs[REG3], 
 		vcpu->regs[REG4], vcpu->regs[REG5], vcpu->regs[SP], vcpu->regs[PC]);
 
-	uint8_t n = 0, z = 0, v = 0, c = 0;
-
-	GET_N(vcpu, n);
-	GET_Z(vcpu, z);
-	GET_V(vcpu, v);
-	GET_C(vcpu, c);	
-
-	printf("flags: n:%d z:%d v:%d c:%d\n", n, z, v, c);
+	printf("flags: n:%d z:%d v:%d c:%d\n", GET_N(vcpu), GET_Z(vcpu), GET_V(vcpu), GET_C(vcpu));
 
 }
 

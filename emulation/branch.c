@@ -28,14 +28,11 @@ emu_stat_t bne_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;				
-	uint8_t bit_z = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_Z(vcpu, bit_z);
 
-	if (!bit_z)
+	if (!GET_Z(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -48,14 +45,11 @@ emu_stat_t beq_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;			
-	uint8_t bit_z = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_Z(vcpu, bit_z);
 
-	if (bit_z)
+	if (GET_Z(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -68,14 +62,11 @@ emu_stat_t bpl_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;		
-	uint8_t bit_n = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_N(vcpu, bit_n);
 
-	if (!bit_n)
+	if (!GET_N(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -88,14 +79,11 @@ emu_stat_t bmi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;		
-	uint8_t bit_n = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_N(vcpu, bit_n);
 
-	if (bit_n)
+	if (GET_N(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -108,14 +96,11 @@ emu_stat_t bvc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_v = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_V(vcpu, bit_v);
 
-	if (!bit_v)
+	if (!GET_V(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -128,14 +113,11 @@ emu_stat_t bvs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_v = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_V(vcpu, bit_v);
 
-	if (bit_v)
+	if (GET_V(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -148,14 +130,11 @@ emu_stat_t bcc_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_C(vcpu, bit_c);
 
-	if (!bit_c)
+	if (!GET_C(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -169,14 +148,11 @@ emu_stat_t bcs_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_C(vcpu, bit_c);
 
-	if (bit_c)
+	if (GET_C(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -189,15 +165,11 @@ emu_stat_t bge_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_n = 0, bit_v = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_N(vcpu, bit_n);
-	GET_V(vcpu, bit_v);
 
-	if (!(bit_n ^ bit_v))
+	if (!(GET_N(vcpu) ^ GET_V(vcpu)))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -210,15 +182,11 @@ emu_stat_t blt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_n = 0, bit_v = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_N(vcpu, bit_n);
-	GET_V(vcpu, bit_v);
 
-	if (bit_n ^ bit_v)
+	if (GET_N(vcpu) ^ GET_V(vcpu))
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -231,16 +199,11 @@ emu_stat_t bgt_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_n = 0, bit_v = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_N(vcpu, bit_n);
-	GET_V(vcpu, bit_v);
-	GET_Z(vcpu, bit_z);
 
-	if (!(bit_z ^ (bit_n ^ bit_v))) 
+	if (!(GET_Z(vcpu) ^ (GET_N(vcpu) ^ GET_V(vcpu)))) 
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -253,16 +216,11 @@ emu_stat_t ble_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_n = 0, bit_v = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_N(vcpu, bit_n);
-	GET_V(vcpu, bit_v);
-	GET_Z(vcpu, bit_z);
 
-	if (bit_z ^ (bit_n ^ bit_v)) 
+	if (GET_Z(vcpu) ^ (GET_N(vcpu) ^ GET_V(vcpu))) 
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -275,15 +233,11 @@ emu_stat_t bhi_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_c = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_C(vcpu, bit_c);
-	GET_Z(vcpu, bit_z);
 
-	if (bit_c == 0 && bit_z == 0) 
+	if ((!GET_C(vcpu)) && (!GET_Z(vcpu))) 
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -296,15 +250,11 @@ emu_stat_t blos_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mo
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_c = 0, bit_z = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_C(vcpu, bit_c);
-	GET_Z(vcpu, bit_z);
 
-	if (bit_c ^ bit_z) 
+	if (GET_C(vcpu) ^ GET_Z(vcpu)) 
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -318,14 +268,11 @@ emu_stat_t bhis_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mo
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_C(vcpu, bit_c);
 
-	if (!bit_c) 
+	if (!GET_C(vcpu)) 
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);
@@ -338,14 +285,11 @@ emu_stat_t blo_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 {
 	uint16_t pc = 0;
 	int8_t offset = 0;	
-	uint8_t bit_c = 0;
 
 	GET_OFFSET(op, offset);
-	
 	GET_PC(vcpu, pc);
-	GET_C(vcpu, bit_c);
 
-	if (bit_c) 
+	if (GET_C(vcpu)) 
 	{
 		pc = pc + offset * 2;
 		SET_PC(vcpu, pc);

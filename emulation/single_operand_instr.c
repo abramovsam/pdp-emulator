@@ -224,20 +224,19 @@ emu_stat_t ror_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 
 	dst = fetch_op_general(vcpu, dst_disp, dst_mode, mode, &dst_addr);	
 
-	uint16_t prev_bit_c = 0, low_bit = 0;;
+	uint16_t low_bit = 0;;
 
-	GET_C(vcpu, prev_bit_c);
 	low_bit = dst & 0x0001;
 
 	dst = dst >> 1;
 	
-	dst = dst | (prev_bit_c << (15 - (8 * mode)));
+	dst = dst | (GET_C(vcpu) << (15 - (8 * mode)));
 
 	writeback_dst_ops(vcpu, dst, dst_disp, dst_mode, mode, dst_addr);
 
 	LOAD_N(vcpu, dst, mode);
 	LOAD_Z(vcpu, dst);
-	LOAD_V(vcpu, prev_bit_c ^ low_bit);
+	LOAD_V(vcpu, GET_C(vcpu) ^ low_bit);
 	LOAD_C(vcpu, low_bit);	
 
 	return EMU_SUCCESS;
@@ -256,14 +255,12 @@ emu_stat_t rol_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 
 	dst = fetch_op_general(vcpu, dst_disp, dst_mode, mode, &dst_addr);	
 
-	uint16_t prev_bit_c = 0, high_bit = 0;
-
-	GET_C(vcpu, prev_bit_c);
+	uint16_t high_bit = 0;
 	
 	high_bit = dst & (0x8000 >> (8 * mode));
 
 	dst = dst << 1;
-	dst = dst | prev_bit_c;
+	dst = dst | GET_C(vcpu);
 
 	uint16_t neg_bit = 0;
 	neg_bit = dst & (0x8000 >> (8 * mode)); 
