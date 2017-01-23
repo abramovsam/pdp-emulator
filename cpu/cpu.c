@@ -52,7 +52,9 @@ int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
 	
 //	vcpu->regs[PC] = 0x200;	// FIXME: this value is chosen only for debug
 	vcpu->regs[PC] = 0x0;
-	
+	vcpu->regs[SP] = 61440;
+
+
 	vcpu->vram = (uint16_t*)((uint8_t*)mem + VRAM_BASE_ADDR); 
 	vcpu->psw = (uint16_t*)((uint8_t*)mem + PS_ADDR);
 	vcpu->br_points = (uint8_t*)((uint8_t*)mem + BR_POINT_ADDR);
@@ -84,6 +86,7 @@ int vcpu_restore(vcpu_t* vcpu, char* path_to_rom)
 
 //	vcpu->regs[PC] = 0x200;
 	vcpu->regs[PC] = 0x0;
+	vcpu->regs[SP] = 61440;
 
 	RESET_RUN_FLAG(vcpu);
 	RESET_STOP_FLAG(vcpu);
@@ -196,6 +199,7 @@ void kb_interrupt_handler(vcpu_t* vcpu)
 	(*(vcpu->psw)).reg_val = *(uint16_t*)((uint8_t*)vcpu->mem_entry + KB_INTERRUPT_VEC + 2);
 
 	SET_PC(vcpu, KB_INTERRUPT_VEC);
+	printf("After receiving kb interrupt PC is set to: %o\n", vcpu->regs[PC]);
 	RESET_KB_STAT_REG(vcpu);
 	KB_INTERRUPT_ON(vcpu);
 }
