@@ -10,10 +10,9 @@ emu_stat_t rti_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	uint16_t sp = 0;
 	uint8_t* sp_addr;
 
-	sp = fetch_op_general(vcpu, 0b110, AUTOINC_ADDR, 0, &sp_addr);	// FIXME: Need to implement separate function 
-	SET_PC(vcpu, sp);												// special for this calback to fetch in same time pc and psw 
-																	// from the stack because now pipelining for this insruction 
-																	// is not possible
+	sp = fetch_op_general(vcpu, 0b110, AUTOINC_ADDR, 0, &sp_addr);	 
+	SET_PC(vcpu, sp);												 
+																	
 	sp = fetch_op_general(vcpu, 0b110, AUTOINC_ADDR, 0, &sp_addr);
 	SET_PSW(vcpu, sp);		
 
@@ -31,12 +30,10 @@ emu_stat_t jsr_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	ADDRESS_MODE_LOW(op, dst_mode);
 	GET_DST(op, dst_disp);	
 
-	uint8_t* dst_addr;
-//	dst = fetch_op_general(vcpu, dst_disp, dst_mode, 0, &dst_addr);	
+	uint8_t* dst_addr;	
 	fetch_op_general(vcpu, dst_disp, dst_mode, 0, &dst_addr);
 	dst_addr -= (uint8_t*)vcpu->mem_entry;
-
-//	tmp = dst;	
+	
 	tmp = dst_addr;
 
 	GET_REG_JSR(op, reg_disp);	

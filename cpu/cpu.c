@@ -38,22 +38,11 @@ int load_from_rom(char* path, void* mem)
 		buf[i] = res;
 	}
 
-	//	memcpy((uint8_t*)mem + 0x200, buf, size/sizeof(uint8_t));
+//		memcpy((uint8_t*)mem + 0x200, buf, size/sizeof(uint8_t));
 	memcpy((uint8_t*)mem + 0x0, buf, size/sizeof(uint8_t));
 
 
 	return 0;
-}
-
-void interrupt_handler(vcpu_t* vcpu)
-{
-	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) = (*(vcpu->psw)).reg_val; 
-	vcpu->regs[SP] -= 2;
-	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) = vcpu->regs[PC];	
-	vcpu->regs[SP] -= 2;
-
-	vcpu->regs[PC] = *(uint16_t*)((uint8_t*)vcpu->mem_entry + KB_INTERRUPT_VEC);
-	(*(vcpu->psw)).reg_val = *(uint16_t*)((uint8_t*)vcpu->mem_entry + KB_INTERRUPT_VEC + 2);	
 }
 
 int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
@@ -73,12 +62,11 @@ int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
 	vcpu->out_data_reg = (uint16_t*)((uint8_t*)mem + OUT_DATA_REG);
 
 	INIT_OUT_STAT_REG(vcpu);
-//	INIT_IN_STAT_REG(vcpu);
+	KB_INTERRUPT_ON(vcpu);	
 	PS_INIT(vcpu);
 
 	vcpu->stop_flag = 0;
 	vcpu->is_running = 0;
-//	vcpu->is_running = 1;
 	vcpu->step_flag = 0;
 
 	load_from_rom(path_to_rom, vcpu->mem_entry);
@@ -86,8 +74,10 @@ int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
 	return 0;
 }
 
-int vcpu_restore(vcpu_t* vcpu, char* path_to_rom)	// FIXME: Need to check 
+int vcpu_restore(vcpu_t* vcpu, char* path_to_rom)
 {
+	printf("Restore vcpu \n");
+
 	memset((uint8_t*)vcpu->regs, 0, sizeof(uint16_t) * 8);
 	memset(vcpu->mem_entry, 0, MEM_SPACE_SIZE);
 //	memset(vcpu->br_points, 0, )		// TODO: Need to deal with brakpoints issue
@@ -98,6 +88,10 @@ int vcpu_restore(vcpu_t* vcpu, char* path_to_rom)	// FIXME: Need to check
 	vcpu->stop_flag = 0;
 	vcpu->is_running = 0;
 	vcpu->step_flag = 0;
+
+	INIT_OUT_STAT_REG(vcpu);
+	KB_INTERRUPT_ON(vcpu);	
+	PS_INIT(vcpu);
 
 	load_from_rom(path_to_rom, vcpu->mem_entry);	
 
@@ -132,18 +126,6 @@ uint16_t fetch_instr(vcpu_t* vcpu)
 		
 	uint16_t op = 0;
 
-	if (GET_KB_STAT_REG(vcpu))
-	{
-		printf("Keyboard interrupt was caught\n");
-		printf("Previous PC: 0x%llx\n", vcpu->regs[PC]);
-		interrupt_handler(vcpu);	
-		printf("PC switched to: 0x%llx\n", vcpu->regs[PC]);
-	}
-	else
-	{
-		printf("PC: %o\n", vcpu->regs[PC]);	
-	}
-
 	memcpy(&op, (uint8_t*)(vcpu->mem_entry) + vcpu->regs[PC], sizeof(uint8_t) * 2);
 	printf("op: 0x%x\n", op);
 
@@ -169,7 +151,7 @@ void vcpu_print(vcpu_t* vcpu)
 
 }
 
-int is_break(vcpu_t* vcpu, uint16_t address)		 // FIXME: Need to check 
+int is_break(vcpu_t* vcpu, uint16_t address) 
 {
 	int set = address / 8;
 	int disp = address % 8;
@@ -193,16 +175,37 @@ emu_stat_t cpu_exec(vcpu_t* vcpu)
 	instr_desc_t* instr;
 	lookup_table(op, &instr);
 
-	if (instr == NULL)				// FIXME: Need to deal with it properly
-		return EMU_UNDEFINED;		// Such case lead to seg fault, need to fix
+	if (instr == NULL)				
+		return EMU_UNDEFINED;	
 
 	emu_stat_t st = instr->execute(vcpu, instr, op, instr->mode);
 
 	return st;
 }
 
+int is_kb_interrupt_rec(vcpu_t* vcpu)
+{
+	if (IS_KB_DATA_AVAILABLE(vcpu) && IS_INTERRUPT_ON(vcpu))
+		return 1;
+	else
+		return 0;
+}
 
+void kb_interrupt_handler(vcpu_t* vcpu)
+{
+	KB_INTERRUPT_OFF(vcpu);	
 
+	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) = (*(vcpu->psw)).reg_val; 
+	vcpu->regs[SP] -= 2;
+	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) = vcpu->regs[PC];	
+	vcpu->regs[SP] -= 2;
+
+	(*(vcpu->psw)).reg_val = *(uint16_t*)((uint8_t*)vcpu->mem_entry + KB_INTERRUPT_VEC + 2);
+
+	SET_PC(vcpu, KB_INTERRUPT_VEC);
+	RESET_KB_STAT_REG(vcpu);
+	KB_INTERRUPT_ON(vcpu);
+}
 
 
 

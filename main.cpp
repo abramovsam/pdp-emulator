@@ -12,7 +12,7 @@ void *cpu(void *p){
     useconds_t usec = 300;
 
     vcpu_t* vcpu = (vcpu_t*)arg->vcpu;
-   	cpu_emulation(&vcpu, "/home/sabramov/test_pdp/unknown.txt"); 
+   	cpu_emulation(&vcpu, "/home/sabramov/test_pdp/hello.txt"); 
  //   cpu_emulation(&vcpu, "/home/sabramov/test_pdp/array.txt");
 
     while (arg->working){

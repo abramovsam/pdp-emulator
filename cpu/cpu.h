@@ -205,19 +205,29 @@ typedef enum emu_stat
 	} while (0)
 */
 
-/* FIXME: WTF ? Why here &= ??? */
+#define KB_INTERRUPT_ON(vcpu)	\
+ 	do {	\
+ 		*(vcpu->kb_stat_reg) |= 0x40;	\
+ 	} while (0)
+
+#define IS_INTERRUPT_ON(vcpu)	((*(vcpu->kb_stat_reg) & 0x0040) >> 6)
+
+#define KB_INTERRUPT_OFF(vcpu)	\
+ 	do {	\
+ 		*(vcpu->kb_stat_reg) &= 0xffbf;	\
+ 	} while (0)
 
 #define SET_KB_STAT_REG(vcpu)	\
 	do {	\
-		*(vcpu->kb_stat_reg) &= 0x0080;	\
+		*(vcpu->kb_stat_reg) |= 0x0080;	\
  	} while (0)
 
 #define RESET_KB_STAT_REG(vcpu)	\
 	do {	\
-		*(vcpu->kb_stat_reg) &= 0x0000;	\
+		*(vcpu->kb_stat_reg) &= 0xff7f;	\
 	} while (0)  
 
-#define GET_KB_STAT_REG(vcpu)	(*(vcpu->kb_stat_reg) >> 7)
+#define IS_KB_DATA_AVAILABLE(vcpu)	((*(vcpu->kb_stat_reg) & 0x0080) >> 7)
 
 #define SET_KB_DATA_REG(vcpu, data)	\
 	do {	\

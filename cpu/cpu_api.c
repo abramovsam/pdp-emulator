@@ -15,13 +15,7 @@
 void throw_kb_interrupt(vcpu_t* vcpu, uint8_t data)
 {
 	SET_KB_DATA_REG(vcpu, data);	
-
-	if (GET_KB_STAT_REG(vcpu))
-	{
-		printf("Keyboard interrupt is not proc yet\n Need to implement buffer\n");	// FIXME: Need to implement buffer
-		abort();
-	}
-
+	printf("Keyboard interrupt was received\n");	
 	SET_KB_STAT_REG(vcpu);
 }
 
@@ -78,6 +72,9 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 					
 		//			 sleep(1); // FIXME: Just for debug
 
+					if (is_kb_interrupt_rec(*vcpu))
+						kb_interrupt_handler(*vcpu);
+
 					if (exec_st == EMU_END)
 						break;
 				}
@@ -91,6 +88,8 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 
 			if (exec_st == EMU_END || exec_st == EMU_UNDEFINED)
 				vcpu_restore(*vcpu, path); 
+
+
 		}	
 	}
 
