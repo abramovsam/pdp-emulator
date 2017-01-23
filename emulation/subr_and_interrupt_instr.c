@@ -10,11 +10,13 @@ emu_stat_t rti_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	uint16_t sp = 0;
 	uint8_t* sp_addr;
 
+	vcpu->regs[SP] +=2;
 	sp = fetch_op_general(vcpu, 0b110, AUTOINC_ADDR, 0, &sp_addr);	 
 	SET_PC(vcpu, sp);												 
-																	
+
 	sp = fetch_op_general(vcpu, 0b110, AUTOINC_ADDR, 0, &sp_addr);
 	SET_PSW(vcpu, sp);		
+	vcpu->regs[SP] -=2;
 
 	return EMU_SUCCESS;
 }

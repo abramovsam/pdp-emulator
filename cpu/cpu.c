@@ -187,13 +187,14 @@ int is_kb_interrupt_rec(vcpu_t* vcpu)
 		return 0;
 }
 
+
 void kb_interrupt_handler(vcpu_t* vcpu)
 {
 	KB_INTERRUPT_OFF(vcpu);	
 
-	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) = (*(vcpu->psw)).reg_val; 
+	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) =  (*(vcpu->psw)).reg_val; 
 	vcpu->regs[SP] -= 2;
-	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) = vcpu->regs[PC];	
+	*(uint16_t*)((uint8_t*)vcpu->mem_entry + vcpu->regs[SP]) =	vcpu->regs[PC];
 	vcpu->regs[SP] -= 2;
 
 	(*(vcpu->psw)).reg_val = *(uint16_t*)((uint8_t*)vcpu->mem_entry + KB_INTERRUPT_VEC + 2);
