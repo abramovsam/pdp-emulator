@@ -2,6 +2,7 @@
 #include "ui_widget.h"
 #include "formain.h"
 #include <QTableWidget>
+#include <stdio.h>
 
 #include "cpu_api.h"
 #include "cpu.h"
@@ -87,7 +88,7 @@ void Widget::slotUpdateRegister() {
 }
 void Widget::keyPressEvent(QKeyEvent *event) {
     int key = event->key();     // целочисленный код клавиши
-    printf("key = %d\t c = %c\n", key, (char)key);
+    printf("key = %d\t c = %c\t uint8 = 0x%x\n", key, (char)key, (unsigned char)key);
     throw_kb_interrupt(vcpu, key);
 }
 
