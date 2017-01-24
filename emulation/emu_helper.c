@@ -18,7 +18,7 @@ uint16_t fetch_word_from_mem(vcpu_t* vcpu)
 uint16_t get_reg(vcpu_t* vcpu, uint16_t disp, uint16_t isa_mode)
 {
 	if (isa_mode)
-		return ((uint8_t*)(vcpu->regs))[disp];			
+        return *((uint8_t*)&((vcpu->regs)[disp]));
 	else
 		return vcpu->regs[disp];
 
@@ -265,7 +265,7 @@ uint16_t fetch_op_general(vcpu_t* vcpu, uint16_t disp, uint16_t mode, uint16_t i
 void set_reg_op(vcpu_t* vcpu, uint16_t disp, uint16_t val, uint16_t isa_mode)
 {
 	if (isa_mode)
-		((uint8_t*)(vcpu->regs))[disp] = val;
+        *((uint8_t*)&((vcpu->regs)[disp])) = val;
 	else
 		vcpu->regs[disp] = val;	
 }
