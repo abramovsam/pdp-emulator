@@ -8,9 +8,13 @@
 
 void *cpu(void *p){
     Arg *arg = (Arg *)p;
+    char *path_to_file = "/home/parallels/Documents/parallels/computer_architecture/pdp11/fill_pic.txt";
 
     vcpu_t* vcpu = (vcpu_t*)arg->vcpu;
-    cpu_emulation(&vcpu, "/home/sabramov/test_pdp/fill_pic.txt");
+    if (arg->argc == 1)
+        cpu_emulation(&vcpu, path_to_file);
+    else
+        cpu_emulation(&vcpu, arg->argv[1]);
 
     return NULL;
 }
