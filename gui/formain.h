@@ -8,8 +8,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
-//#include "cpu.h"
-//#include "cpu_api.h"
+#include "cpu_api.h"
+
 
 typedef struct AsmCommand {
     char *command; // or char[*magic*]
@@ -17,6 +17,7 @@ typedef struct AsmCommand {
     int breakePointIsSet;
 } AsmCommand;
 
+/*
 typedef struct SharedMem {
     int isFull;
     unsigned char *vidio_memory;
@@ -31,13 +32,12 @@ typedef struct CallList {
     int doStep;
     int setBreakPointForAddress; // contain address, if -1 - not set
 } CallList;
+*/
 
 typedef struct Arg {
     int argc;
     char **argv;
-    SharedMem *sharedMem;
-    CallList *callList;
-    void* vcpu;
+    vcpu_t* vcpu;
     int working;
 } Arg;
 

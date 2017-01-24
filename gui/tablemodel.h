@@ -4,14 +4,14 @@
 #include <QAbstractTableModel>
 #include <QSqlTableModel>
 #include <QVariant>
-#include "process.h"
+//#include "process.h"
 
 class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
     explicit TableModel(QObject *parent = 0);
-    void setSharedMem(SharedMem *sharedMem);
+//    void setSharedMem(SharedMem *sharedMem);
     void headerDoubleClick(QModelIndex index);
     int rowCount();
 
@@ -20,7 +20,7 @@ signals:
 public slots:
 
 private:
-    SharedMem *sharedMem;
+ //   SharedMem *sharedMem;
 
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;

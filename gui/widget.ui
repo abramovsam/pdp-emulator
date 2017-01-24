@@ -292,30 +292,17 @@
     <string>0x00</string>
    </property>
   </widget>
-  <widget class="QLabel" name="flags">
+  <widget class="QLabel" name="Z">
    <property name="geometry">
     <rect>
      <x>390</x>
      <y>150</y>
-     <width>41</width>
+     <width>21</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Flags</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="val_flags">
-   <property name="geometry">
-    <rect>
-     <x>450</x>
-     <y>150</y>
-     <width>81</width>
-     <height>17</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>b00000000</string>
+    <string>Z :</string>
    </property>
   </widget>
   <widget class="QTableView" name="tableCommand">
@@ -388,6 +375,97 @@
    </property>
    <property name="text">
     <string>Reset</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="V">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>150</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>V :</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="C">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>150</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>C :</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="N">
+   <property name="geometry">
+    <rect>
+     <x>600</x>
+     <y>150</y>
+     <width>21</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>N :</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="flag_z">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>150</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="flag_v">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>150</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="flag_c">
+   <property name="geometry">
+    <rect>
+     <x>560</x>
+     <y>150</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="flag_n">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>150</y>
+     <width>21</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>0</string>
    </property>
   </widget>
  </widget>

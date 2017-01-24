@@ -2,6 +2,8 @@
 #include <malloc.h>
 #include <string.h>
 
+/*
+
 Process::Process(SharedMem *sharedMem, CallList *callList) {
     this->callList = callList;
     numberOfPixel = 100;
@@ -117,6 +119,7 @@ void Process::setBreakePoint(int address) {
     printf("set breakpoint to address %d\n", address);
 }
 
+*/
 
 
 

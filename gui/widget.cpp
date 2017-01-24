@@ -6,26 +6,26 @@
 #include "cpu_api.h"
 #include "cpu.h"
 
+extern int emulator_initialized;
+
 Widget::Widget(QWidget *parent, Arg *arg) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
 
-    while (!arg->sharedMem->isFull);
-    sharedMem = arg->sharedMem;
-    callList = arg->callList;
+    while (!emulator_initialized);
 
     vcpu = arg->vcpu;   // Added
 
     tableModel = new TableModel();
-    tableModel->setSharedMem(sharedMem);
+ //   tableModel->setSharedMem(sharedMem);
     ui->tableCommand->setModel(tableModel);
     ui->tableCommand->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->tableCommand->resizeColumnsToContents();
-    ui->tableCommand->setItemDelegate(new StyledDelegate(this, sharedMem->asmCommand));
+ //   ui->tableCommand->setItemDelegate(new StyledDelegate(this, sharedMem->asmCommand));
 
-    ui->bitmap->setMatrix(sharedMem->vidio_memory);
+    ui->bitmap->setVcpu(vcpu);
 
     connect(ui->buttonRun,      SIGNAL(clicked()), this, SLOT(slotButtonRun()));
     connect(ui->buttonStop,     SIGNAL(clicked()), this, SLOT(slotButtonStop()));
@@ -37,12 +37,12 @@ Widget::Widget(QWidget *parent, Arg *arg) :
 
     ui->buttonContinue->setEnabled(false);
     ui->buttonStep->setEnabled(false);
-    ui->buttonStop->setEnabled(false);
+    ui->buttonStop->setEnabled(true);
     ui->buttonReset->setEnabled(false);
 
     timer = new QTimer(this);
     timer->setInterval(16);
-    connect(timer, SIGNAL(timeout()) , this, SLOT(slotUpdateRegister()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(slotUpdateRegister()));
     timer->start();
 
 }
@@ -50,33 +50,45 @@ Widget::Widget(QWidget *parent, Arg *arg) :
 void Widget::userClicked(QModelIndex index) {
     tableModel->headerDoubleClick(index);
     ui->tableCommand->reset();
-    int address = sharedMem->asmCommand[index.row()].address;
-    callList->setBreakPointForAddress = address;
+ //   int address = sharedMem->asmCommand[index.row()].address;
+ //   callList->setBreakPointForAddress = address;
 
     tableModel->setData(index, QBrush(Qt::red), Qt::BackgroundRole);
 }
 
 void Widget::slotUpdateRegister() {
     char strtmp[100];
-    sprintf(strtmp, "0x%x", sharedMem->registers[0]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 0));
     ui->val_R_0->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[1]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 1));
     ui->val_R_1->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[2]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 2));
     ui->val_R_2->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[3]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 3));
     ui->val_R_3->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[4]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 4));
     ui->val_R_4->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[5]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 5));
     ui->val_R_5->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[6]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 6));
     ui->val_R_6->setText(strtmp);
-    sprintf(strtmp, "0x%x", sharedMem->registers[7]);
+    sprintf(strtmp, "0x%x", get_register(vcpu, 7));
     ui->val_R_7->setText(strtmp);
 
-    sprintf(strtmp, "x%x", *sharedMem->flags);
-    ui->val_flags->setText(strtmp);
+    // print flags c n v z
+    sprintf(strtmp, "%x", get_cflag(vcpu));
+    ui->flag_c->setText(strtmp);
+    sprintf(strtmp, "%x", get_nflag(vcpu));
+    ui->flag_n->setText(strtmp);
+    sprintf(strtmp, "%x", get_vflag(vcpu));
+    ui->flag_v->setText(strtmp);
+    sprintf(strtmp, "%x", get_zflag(vcpu));
+    ui->flag_z->setText(strtmp);
+}
+void Widget::keyPressEvent(QKeyEvent *event) {
+    int key = event->key();     // целочисленный код клавиши
+    printf("key = %d\t c = %c\n", key, (char)key);
+    throw_kb_interrupt(vcpu, key);
 }
 
 void Widget::setEnableButton(State state) {
@@ -85,7 +97,7 @@ void Widget::setEnableButton(State state) {
         ui->buttonRun->setEnabled(true);
         ui->buttonContinue->setEnabled(false);
         ui->buttonStep->setEnabled(false);
-        ui->buttonStop->setEnabled(false);
+        ui->buttonStop->setEnabled(true);
         ui->buttonReset->setEnabled(false);
         break;
     case StateRun:
@@ -106,32 +118,27 @@ void Widget::setEnableButton(State state) {
 }
 
 void Widget::slotButtonRun() {
-    callList->doRun = 1;
-    run_emulator((vcpu_t*)vcpu); 
+    run_emulator(vcpu);
     setEnableButton(StateRun);
 }
 
 void Widget::slotButtonStop() {
-    callList->doStopReset = 1;
-    stop_emulator((vcpu_t*)vcpu);    
+    stop_emulator(vcpu);
     setEnableButton(StateStop);
 }
 
 void Widget::slotButtonReset() {
-    callList->doStopReset = 1;
-    reset_emulator((vcpu_t*)vcpu);
+    reset_emulator(vcpu);
     setEnableButton(StateInit);
 }
 
 void Widget::slotButtonContinue() {
-    callList->doRun = 1;
-    run_emulator((vcpu_t*)vcpu);    
+    run_emulator(vcpu);
     setEnableButton(StateRun);
 }
 
 void Widget::slotButtonStep() {
-    callList->doStep = 1;
-    step_emulator((vcpu_t*)vcpu);    
+    step_emulator(vcpu);
     setEnableButton(StateStop);
 }
 

@@ -6,11 +6,11 @@ TableModel::TableModel(QObject *parent) :
     QAbstractTableModel(parent)
 {
 }
-
+/*
 void TableModel::setSharedMem(SharedMem *sharedMem) {
     this->sharedMem = sharedMem;
 }
-
+*/
 int TableModel::rowCount(const QModelIndex &parent) const {
     return 8; // сделаем фиксированно 8 строк в таблице
 }
@@ -20,6 +20,7 @@ int TableModel::columnCount(const QModelIndex &parent) const {
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const {
+    /*
     if (role == Qt::DisplayRole) {
         QString unswer;
         if (index.column() == 0) {
@@ -36,6 +37,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const {
         }
         return QVariant(unswer);
     }
+    */
     return QVariant();
 }
 
@@ -58,8 +60,10 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 }
 
 void TableModel::headerDoubleClick(QModelIndex index) {
+    /*
     sharedMem->asmCommand[index.row()].breakePointIsSet =
             !sharedMem->asmCommand[index.row()].breakePointIsSet;
+    */
 }
 
 
