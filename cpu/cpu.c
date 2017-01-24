@@ -1,7 +1,7 @@
 #include "cpu.h"
 #include <stdio.h>
-#include <sys/mman.h>	// for mmap
-#include <stdlib.h>	// for abort
+#include <sys/mman.h>	
+#include <stdlib.h>	
 #include <decode/decode.h>
 
 #include <sys/types.h>
@@ -27,8 +27,7 @@ int load_from_rom(char* path, void* mem)
 	void* mapped_area = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
     uint8_t* buf = malloc(size/SHRINK_FACTOR);
 
-	int i = 0, j = 0;
-	int res = 0;
+	int i = 0, j = 0, res = 0;
 
 	for (i = 0; i < size / 8; i++)
 	{
@@ -40,9 +39,7 @@ int load_from_rom(char* path, void* mem)
 		buf[i] = res;
 	}
 
-//		memcpy((uint8_t*)mem + 0x200, buf, size/sizeof(uint8_t));
     memcpy((uint8_t*)mem + 0x0, buf, size/SHRINK_FACTOR);
-
 
 	return 0;
 }
@@ -52,9 +49,8 @@ int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
 	vcpu->mem_entry = mem;
 	vcpu->regs = (uint16_t*)((uint8_t*)mem + MEM_SPACE_SIZE);
 	
-//	vcpu->regs[PC] = 0x200;	// FIXME: this value is chosen only for debug
 	vcpu->regs[PC] = 0x0;
-	vcpu->regs[SP] = 61440;
+	vcpu->regs[SP] = SP_DISP;
 
 	vcpu->vram = (uint16_t*)((uint8_t*)mem + VRAM_BASE_ADDR); 
 	vcpu->psw = (uint16_t*)((uint8_t*)mem + PS_ADDR);
@@ -79,15 +75,12 @@ int vcpu_init(vcpu_t* vcpu, void* mem, char* path_to_rom)
 
 int vcpu_restore(vcpu_t* vcpu, char* path_to_rom)
 {
-	printf("Restore vcpu \n");
-
+//	printf("Restore vcpu \n");
 	memset((uint8_t*)vcpu->regs, 0, sizeof(uint16_t) * 8);
 	memset(vcpu->mem_entry, 0, MEM_SPACE_SIZE);
-//	memset(vcpu->br_points, 0, )		// TODO: Need to deal with brakpoints issue
 
-//	vcpu->regs[PC] = 0x200;
 	vcpu->regs[PC] = 0x0;
-	vcpu->regs[SP] = 61440;
+	vcpu->regs[SP] = SP_DISP;
 
 	RESET_RUN_FLAG(vcpu);
 	RESET_STOP_FLAG(vcpu);
@@ -124,15 +117,11 @@ int emu_init(vcpu_t* vcpu, char* path_to_rom)
 
 uint16_t fetch_instr(vcpu_t* vcpu)
 {
-	printf(" ------- \n");
-
-	printf("Instruction fetch \n");
-		
+//	printf(" ------- \n");
+//	printf("Instruction fetch \n");
 	uint16_t op = 0;
-
 	memcpy(&op, (uint8_t*)(vcpu->mem_entry) + vcpu->regs[PC], sizeof(uint8_t) * 2);
-	printf("op: 0x%x\n", op);
-
+//	printf("op: 0x%x\n", op);
 	vcpu->regs[PC] += 2;
 
 	return op;
@@ -188,7 +177,6 @@ int is_kb_interrupt_rec(vcpu_t* vcpu)
 		return 0;
 }
 
-
 void kb_interrupt_handler(vcpu_t* vcpu)
 {
 	KB_INTERRUPT_OFF(vcpu);	
@@ -201,7 +189,7 @@ void kb_interrupt_handler(vcpu_t* vcpu)
 	(*(vcpu->psw)).reg_val = *(uint16_t*)((uint8_t*)vcpu->mem_entry + KB_INTERRUPT_VEC + 2);
 
 	SET_PC(vcpu, KB_INTERRUPT_VEC);
-	printf("After receiving kb interrupt PC is set to: %o\n", vcpu->regs[PC]);
+//	printf("After receiving kb interrupt PC is set to: %o\n", vcpu->regs[PC]);
 	RESET_KB_STAT_REG(vcpu);
 	KB_INTERRUPT_ON(vcpu);
 }

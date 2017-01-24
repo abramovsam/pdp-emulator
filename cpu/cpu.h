@@ -19,6 +19,7 @@
 #define PS_ADDR			0177776
 #define PS_INIT_MASK 	0x0003		//0b0000000000000011	
 #define BREAK_BIT_MAP_SIZE_BYTES	1024 	
+#define SP_DISP				0170000
 
 typedef uint16_t reg16_t;
 typedef uint16_t instr_t;

@@ -1,8 +1,8 @@
 #include "cpu_api.h"
 
 #include <stdio.h>
-#include <sys/mman.h>	// for mmap
-#include <stdlib.h>	// for abort
+#include <sys/mman.h>	
+#include <stdlib.h>	
 #include <decode/decode.h>
 
 #include <sys/types.h>
@@ -17,8 +17,8 @@ int emulator_halted;
 void throw_kb_interrupt(vcpu_t* vcpu, uint8_t data)
 {
 	SET_KB_DATA_REG(vcpu, data);	
-	printf("Keyboard interrupt was received\n");	
-	printf("Data: %o\n", data);
+//	printf("Keyboard interrupt was received\n");	
+//	printf("Data: %o\n", data);
 	SET_KB_STAT_REG(vcpu);
 }
 
@@ -45,12 +45,12 @@ void reset_emulator(vcpu_t* vcpu)
 int cpu_emulation(vcpu_t** vcpu, char* path)
 {
 	emu_init(*vcpu, path);	
-	vcpu_print(*vcpu);
+//	vcpu_print(*vcpu);
 
 	emulator_initialized = 1;
 	emulator_halted = 0;
 
-	printf("emulator initialized\n");	
+//	printf("emulator initialized\n");	
 
 	while (1)
 	{
@@ -81,7 +81,7 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 						break;
 
 					exec_st = cpu_exec((*vcpu));			
-					vcpu_print(*vcpu);
+					// vcpu_print(*vcpu);
 
 					if (exec_st == EMU_END)
 						break;
@@ -172,7 +172,7 @@ int is_emu_init()
 	return emulator_initialized;
 }
 
-uint16_t get_vram_val(vcpu_t* vcpu, int offset)	// FIXME: Need to handle 
+uint16_t get_vram_val(vcpu_t* vcpu, int offset)	
 {
 	if (offset > VRAM_SIZE)
 		return 0xffff; 

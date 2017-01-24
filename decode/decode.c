@@ -22,16 +22,15 @@ void lookup_table(uint16_t op, instr_desc_t** instr_desc)
 
 		if (table_cmp((*instr_desc)->mask, (*instr_desc)->value, op))
 		{
-			printf("Instruction: %s\n", (*instr_desc)->name);
+//			printf("Instruction: %s\n", (*instr_desc)->name);
 			return;
 		}
 
 	} while ((++(*instr_desc))->mask);
 
 	*instr_desc = NULL;
-	printf("instr_desc: %p\n", *instr_desc);
 	
-	printf("Unknown instruction: 0x%x\n", op);
+//	printf("Unknown instruction: 0x%x\n", op);
 }
 
 
