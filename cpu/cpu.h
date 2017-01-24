@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #define GPR_NUM	8
-#define ADDR_SPACE_SIZE		0400000	 // 128K 
+#define ADDR_SPACE_SIZE		0400000	 // 128K in order to contain registers
 #define MEM_SPACE_SIZE		0200000	 // 64K	
 #define BR_POINT_ADDR		0200020  // 65536 + 16
 #define KB_INTERRUPT_VEC	060	 	 //	48 in dec
@@ -73,9 +73,6 @@ typedef struct vcpu
 	uint16_t* out_data_reg;
 
 } vcpu_t;
-
-int emulator_initialized;
-int emulator_halted;
 
 typedef enum emu_stat
 {	
@@ -205,29 +202,19 @@ typedef enum emu_stat
 	} while (0)
 */
 
-#define KB_INTERRUPT_ON(vcpu)	\
- 	do {	\
- 		*(vcpu->kb_stat_reg) |= 0x40;	\
- 	} while (0)
-
-#define IS_INTERRUPT_ON(vcpu)	((*(vcpu->kb_stat_reg) & 0x0040) >> 6)
-
-#define KB_INTERRUPT_OFF(vcpu)	\
- 	do {	\
- 		*(vcpu->kb_stat_reg) &= 0xffbf;	\
- 	} while (0)
+/* FIXME: WTF ? Why here &= ??? */
 
 #define SET_KB_STAT_REG(vcpu)	\
 	do {	\
-		*(vcpu->kb_stat_reg) |= 0x0080;	\
+		*(vcpu->kb_stat_reg) &= 0x0080;	\
  	} while (0)
 
 #define RESET_KB_STAT_REG(vcpu)	\
 	do {	\
-		*(vcpu->kb_stat_reg) &= 0xff7f;	\
+		*(vcpu->kb_stat_reg) &= 0x0000;	\
 	} while (0)  
 
-#define IS_KB_DATA_AVAILABLE(vcpu)	((*(vcpu->kb_stat_reg) & 0x0080) >> 7)
+#define GET_KB_STAT_REG(vcpu)	(*(vcpu->kb_stat_reg) >> 7)
 
 #define SET_KB_DATA_REG(vcpu, data)	\
 	do {	\

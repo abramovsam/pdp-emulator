@@ -2,7 +2,7 @@
 #define PROCESS_H
 
 #include "formain.h"
-
+/*
 class Process
 {
 public:
@@ -26,5 +26,5 @@ private:
     int numberOfCommand;
     AsmCommand *asmCommand; // >= 8
 };
-
+*/
 #endif // PROCESS_H

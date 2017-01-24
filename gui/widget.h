@@ -4,7 +4,7 @@
 
 #include <QWidget>
 #include "tablemodel.h"
-#include "process.h"
+//#include "process.h"
 #include <QTableView>
 #include "formain.h"
 #include "styleddelegate.h"
@@ -27,14 +27,15 @@ public:
     explicit Widget(QWidget *parent = 0, Arg *arg = NULL);
     ~Widget();
 
+protected:
+    virtual void keyPressEvent(QKeyEvent *event);
+
 private:
     Ui::Widget *ui;
     QTimer *timer;
-    SharedMem *sharedMem;
-    CallList *callList;
     TableModel *tableModel;
 
-    void* vcpu;     // Added vcpu
+    vcpu_t* vcpu;
 
     void setEnableButton(State state);
 

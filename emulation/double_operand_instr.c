@@ -18,6 +18,13 @@ emu_stat_t mov_emu(vcpu_t* vcpu, struct instr_desc *instr, instr_t op, instr_mod
 	GET_SOURCE(op, src_disp);
 	GET_DST(op, dst_disp);
 
+	printf("dst mode: %o\n", dst_mode);
+	printf("src mode: %o\n", src_mode);
+
+	printf("dst disp: %d\n", dst_disp);
+	printf("src disp: %d\n", src_disp);
+	printf("mode: %o\n", mode);
+
 	uint8_t* src_addr;
 	src = fetch_op_general(vcpu, src_disp, src_mode, mode, &src_addr);
 

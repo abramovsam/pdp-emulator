@@ -11,32 +11,32 @@
 #include <unistd.h>
 #include <string.h>
 
-
+extern int emulator_initialized;
+extern int emulator_halted;
 void throw_kb_interrupt(vcpu_t* vcpu, uint8_t data)
 {
 	SET_KB_DATA_REG(vcpu, data);	
-	printf("Keyboard interrupt was received\n");	
+
+	if (GET_KB_STAT_REG(vcpu))
+	{
+		printf("Keyboard interrupt is not proc yet\n Need to implement buffer\n");	// FIXME: Need to implement buffer
+		abort();
+	}
+
 	SET_KB_STAT_REG(vcpu);
 }
 
 void run_emulator(vcpu_t* vcpu)
 {
 	if (!(vcpu->is_running))
-	{	
 		vcpu->is_running = 1;
-		vcpu->stop_flag = 0;
-	}
 	else
-	{	
 		vcpu->stop_flag = 0;
-	}
 }
 
 void reset_emulator(vcpu_t* vcpu)
 {
 	CLEAR_RUN_FLAG(vcpu);
-	RESET_STEP_FLAG(vcpu);
-	RESET_STOP_FLAG(vcpu);	
 }
 
 int cpu_emulation(vcpu_t** vcpu, char* path)
@@ -54,32 +54,29 @@ int cpu_emulation(vcpu_t** vcpu, char* path)
 		if (emulator_halted)
 			break;
 
-		if ((*vcpu)->is_running || (*vcpu)->stop_flag)
+		if ((*vcpu)->is_running)
 		{
 			emu_stat_t exec_st = EMU_SUCCESS;
 			
 			while (1)
 			{
-				if (!((*vcpu)->is_running) && !(*vcpu)->stop_flag)
-					break; 
-				
-				if (emulator_halted)
+				if (!((*vcpu)->is_running))
 					break; 
 
 				if (is_break(*vcpu, (*vcpu)->regs[PC]))
 					SET_STOP_FLAG((*vcpu));
 
-				if (!(*vcpu)->stop_flag || (*vcpu)->step_flag)
+				if (! (*vcpu)->stop_flag || (*vcpu)->step_flag)
 				{
-					if ((*vcpu)->stop_flag)
-						RESET_STEP_FLAG((*vcpu));
+//					if ((*vcpu)->stop_flag)
+//						RESET_STEP_FLAG((*vcpu));
 
-					if (!((*vcpu)->is_running) && !(*vcpu)->stop_flag)
-						break;
+                    if ((*vcpu)->stop_flag || !((*vcpu)->is_running))       // TODO: Need to check
+                        RESET_STEP_FLAG((*vcpu));
 
 					exec_st = cpu_exec((*vcpu));			
 					vcpu_print(*vcpu);
-
+					
 					// sleep(1); // FIXME: Just for debug
 				
 					if (exec_st == EMU_END)
@@ -109,6 +106,7 @@ void halt_emulator(vcpu_t* vcpu)
 	emulator_halted = 1;
 }
 
+
 void stop_emulator(vcpu_t* vcpu)
 {
 	vcpu->stop_flag = 1;
@@ -118,6 +116,7 @@ void step_emulator(vcpu_t* vcpu)
 {
 	vcpu->step_flag = 1;
 }
+
 
 void set_breakpoint(vcpu_t* vcpu, uint16_t address)		// FIXME: Need to check
 {

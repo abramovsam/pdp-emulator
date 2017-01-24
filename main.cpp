@@ -8,17 +8,10 @@
 
 void *cpu(void *p){
     Arg *arg = (Arg *)p;
-    Process process(arg->sharedMem, arg->callList);
-    useconds_t usec = 300;
 
     vcpu_t* vcpu = (vcpu_t*)arg->vcpu;
-   	cpu_emulation(&vcpu, "/home/sabramov/test_pdp/hello.txt"); 
- //   cpu_emulation(&vcpu, "/home/sabramov/test_pdp/array.txt");
+    cpu_emulation(&vcpu, "/home/parallels/Documents/parallels/computer_architecture/pdp11/fill.txt");
 
-    while (arg->working){
-        process.checkCallList();
-        usleep(usec);
-    }
     return NULL;
 }
 
@@ -36,24 +29,10 @@ int main(int argc, char *argv[])
 {
 
     Arg arg;
-    CallList callList;
-    callList.doRun = 0;
-    callList.doStep = 0;
-    callList.doStopReset = 0;
-    callList.setBreakPointForAddress = -1;
-
-    printf("PDP 11 Emulator\n");
-
-    SharedMem sharedMem;
-    sharedMem.isFull = 0;
-
     arg.argc = argc;
     arg.argv = argv;
-    arg.sharedMem = &sharedMem;
-    arg.callList = &callList;
     arg.vcpu = (vcpu_t*)malloc(sizeof(vcpu_t));
     memset(arg.vcpu, 0, sizeof(vcpu_t));
-    arg.working = 1;
 
     pthread_t gui_st, cpu_st;
     errno = 0;
@@ -71,7 +50,7 @@ int main(int argc, char *argv[])
         printf("error pthread_join gui\n");
         return errno;
     }
-    arg.working = 0;
+    halt_emulator(arg.vcpu);
     errno = 0;
     if (pthread_join(cpu_st, NULL)) {
         printf("error pthread_join cpu\n");
